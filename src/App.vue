@@ -1,18 +1,32 @@
 <template>
   <main>
-    <add-user></add-user>
-    <delete-user></delete-user>
+    <user-list :users="activeUsers" @list-projects="selectUser"></user-list>
+    <projects-list :user="selectedUser"></projects-list>
   </main>
 </template>
 
 <script>
-import AddUser from './components/AddUser.vue';
-import DeleteUser from './components/DeleteUser.vue';
+import { ref } from 'vue';
+
+import USER_DATA from './dummy-data.js';
+
+import UserList from './components/users/UserList.vue';
+import ProjectsList from './components/projects/ProjectsList.vue';
 
 export default {
   components: {
-    AddUser,
-    DeleteUser,
+    UserList,
+    ProjectsList,
+  },
+  setup() {
+    const selectedUser = ref(null);
+    const activeUsers = USER_DATA;
+
+    function selectUser(uid) {
+      selectedUser.value = activeUsers.find((usr) => usr.id === uid);
+    }
+
+    return { selectedUser, activeUsers, selectUser };
   },
 };
 </script>
@@ -21,40 +35,34 @@ export default {
 * {
   box-sizing: border-box;
 }
-
 html {
   font-family: sans-serif;
 }
-
 body {
   margin: 0;
 }
 
 main {
-  width: 40rem;
-  margin: 3rem auto;
-}
-
-section {
-  margin: 2rem auto;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  padding: 1rem;
+  display: flex;
+  justify-content: space-around;
 }
 
 button {
   font: inherit;
-  background-color: #310131;
-  border: 1px solid #310131;
-  border-radius: 8px;
-  color: white;
+  border: 1px solid #00006b;
+  background-color: transparent;
+  color: #00006b;
   padding: 0.5rem 1.5rem;
   cursor: pointer;
+  margin: 0.5rem 0.5rem 0.5rem 0;
 }
-
 button:hover,
 button:active {
-  background-color: #770e77;
-  border-color: #770e77;
+  background-color: #efefff;
+}
+
+button.selected {
+  background-color: #00006b;
+  color: white;
 }
 </style>
